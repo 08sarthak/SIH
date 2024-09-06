@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "593782574088",
+    "project_id": "kisaandvaar",
+    "storage_bucket": "kisaandvaar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593782574088:android:726ccdd3ea7f6530bed5bd",
+        "android_client_info": {
+          "package_name": "com.kisaan_dvaar.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593782574088-0qejjen68r8gqr57t2qc67scphpr1v0c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRL8j12uW8Sugwx_gY1psieOwfyyqIGcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593782574088-0qejjen68r8gqr57t2qc67scphpr1v0c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "593782574088-d36q82e314ajpg4g8aob02m4d0iukh92.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kisaanDvaar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

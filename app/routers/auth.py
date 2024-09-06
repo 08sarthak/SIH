@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 import app.models.model_types as modelType
 from fastapi.security import HTTPBearer
+from app.controllers import auth
 
 router = APIRouter()
 
@@ -24,15 +25,19 @@ async def selected_language(language:modelType.Language):
 @router.post("/sign-up")
 async def sign_up(sign_up_request: modelType.SignUpRequest):
     try:
-        # response = await auth.sign_up_user(
-        #     email=sign_up_request.email,
-        #     password=sign_up_request.password,
-        # )
-        return {
-            "status": "success",
-            "message": "User signed up successfully. Please check your email to confirm your account.",
-            "data": "response"
-        }
+        response = await auth.sign_up_user(sign_up_request)
+        if response:
+            return {
+                "status": "success",
+                "message": "User signed up successfully. Please check your email to confirm your account.",
+                "data": response
+            }
+        else:
+            return {
+                "status": "failure",
+                "message": "User not signed up .",
+                "data": response
+            }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
