@@ -16,6 +16,7 @@ initialize_app(cred)
 auth = auth()
 
 router = APIRouter()
+
 @router.post("/login")
 async def login(login_request: modelType.LoginRequest):
     try:
