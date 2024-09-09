@@ -50,3 +50,4 @@ async def price_recommend(crop_data:model_type.CropData):
             "message": f"An error occurred: {e}",
             "data": None
         }
+        

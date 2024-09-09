@@ -50,7 +50,7 @@ async def login_user(login_request: modelType.LoginRequest):
 
 
 @router.post("/set-profile")
-async def login_user(profile: modelType.Profile):
+async def login_user(profile: modelType.ProfileData):
     # auth_result = auth.authenticate_user(login_request.email, login_request.password)
     # login_id = auth.extract_sub_from_token(auth_result['AccessToken'])
     return {
