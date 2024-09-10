@@ -1,5 +1,8 @@
 from firebase_admin import credentials, initialize_app, auth
 from fastapi import UploadFile, File
+import firebase_admin._user_identifier
+import firebase_admin.auth
+import firebase_admin.instance_id
 import app.models.model_types as modelType
 from app.helpers import ai_helpers
 from app.utils import utils
@@ -71,6 +74,9 @@ async def build_new_profile(build_profile_request: modelType.ProfileData):
         )
         
         print('Successfully created new user profile:', user_profile)
+        user = auth.get_user
+
+        
         return user_profile
     
     except ValueError as e:
@@ -78,4 +84,13 @@ async def build_new_profile(build_profile_request: modelType.ProfileData):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))  
     
-      
+    
+def get_active_user_session_info():
+    """User authentication per session is possible from flutter side, TODO"""
+    # Validate user's occupation (ensure they are the owner or an admin)
+    # user = await User.get_current_user()
+    # if user.occupation not in ["owner", "admin"]:
+    #     raise HTTPException(status_code=403, detail="Only owners or admins can update service listings.")
+    # https://firebase.google.com/docs/auth/android/manage-users
+    
+    
