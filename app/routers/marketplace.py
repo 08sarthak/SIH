@@ -25,20 +25,26 @@ The endpoints to be used are:
 
 /marketplace
 /marketplace/query={query}
+/marketplace/{item_category}
 /marketplace/{item_category}/query={query}
-/marketplace/{price}/query={query}
-/marketplace/{quantity}/query={query}
-/marketplace/{ratings}/query={query}
 /marketplace/{farm}/query={query}
-/marketplace/{item_category}/
-
-Multiple filters applied at the same time is currently out of scope, TODO for later.
+/marketplace/{pincode}/query={query}
+/marketplace/query={query}/sorted_by_ratings
+/marketplace/query={query}/sorted_by_price
+/marketplace/query={query}/sorted_by_quantity
 
 args:
 - item_category: str OR Other filters 
 - query: str
 return:
 - list of items
+
+TODO:
+Implement being able to specify a location's radius:
+eg. 100 km range from 201305 pincode
+TODO:
+Multiple filters applied at the same time is currently out of scope, implement later.
+
 """
 
 def find_common_items(query_results1, query_results2):
@@ -99,7 +105,8 @@ async def get_marketplace_items_by_category_and_query(item_category: str, query:
     
     items = []
     for doc in query_results:
-        item_data = doc.to_dict()
+        # item_data = doc.to_dict()
+        item_data = dict(doc)
         if item_data["item_status"] == "in stock":  # Filter in-stock items
             items.append(item_data)
 
@@ -165,6 +172,81 @@ async def get_marketplace_items_by_category(item_category):
 
     return items
 
+@router.get("/marketplace/query={query}/sort_by_price")
+async def get_marketplace_items_by_query_and_sort_by_price(query):
+    """
+    Retrieves items based on a search query and sorts them by price.
+    """
+    inventory_ref = db.reference("inventory")
 
+    # Query documents where name or description contains the query
+    query_results = inventory_ref.order_by_child("name").start_at(query).end_at(query + "\uf8ff")
+    query_results2 = inventory_ref.order_by_child("description").start_at(query).end_at(query + "\uf8ff")
 
+    # Find common items
+    common_items_set = find_common_items(query_results, query_results2)
 
+    # Sort common items by price
+    sorted_items = sorted(common_items_set, key=lambda item: item["price"]["value"])
+
+    return sorted_items
+
+@router.get("/marketplace/query={query}/sort_by_quantity")
+async def get_marketplace_items_by_query_and_sort_by_quantity(query):
+    """
+    Retrieves items based on a search query and sorts them by quantity.
+    """
+    inventory_ref = db.reference("inventory")
+
+    # Query documents where name or description contains the query
+    query_results = inventory_ref.order_by_child("name").start_at(query).end_at(query + "\uf8ff")
+    query_results2 = inventory_ref.order_by_child("description").start_at(query).end_at(query + "\uf8ff")
+
+    # Find common items
+    common_items_set = find_common_items(query_results, query_results2)
+
+    # Sort common items by quantity
+    sorted_items = sorted(common_items_set, key=lambda item: item["quantity"]["value"])
+
+    return sorted_items
+
+@router.get("/marketplace/query={query}/sorted_by_ratings")
+async def get_marketplace_items_by_query_and_sort_by_ratings(query):
+    """
+    Retrieves items based on a search query and sorts them by average rating.
+    """
+    inventory_ref = db.reference("inventory")
+
+    # Query documents where name or description contains the query
+    query_results = inventory_ref.order_by_child("name").start_at(query).end_at(query + "\uf8ff")
+    query_results2 = inventory_ref.order_by_child("description").start_at(query).end_at(query + "\uf8ff")
+
+    # Find common items
+    common_items_set = find_common_items(query_results, query_results2)
+
+    # Sort common items by average rating
+    sorted_items = sorted(common_items_set, key=lambda item: item["average_rating"], reverse=True)
+
+    return sorted_items
+
+@router.get("/marketplace/{pincode}/query={query}")
+async def get_marketplace_items_by_pincode_and_query(pincode, query):
+    """
+    Retrieves items based on a pincode and a search query.
+    """
+    inventory_ref = db.reference("inventory")
+
+    # Query documents by pincode and search query
+    query_results = inventory_ref.order_by_child("pincode").start_at(pincode).end_at(pincode + "\uf8ff")
+    query_results2 = inventory_ref.order_by_child("name").start_at(query).end_at(query + "\uf8ff")
+
+    # Find common items
+    common_items_set = find_common_items(query_results, query_results2)
+
+    items = []
+    for doc in common_items_set:
+        item_data = dict(doc)
+        if item_data["item_status"] == "in stock":  # Filter in-stock items
+            items.append(item_data)
+
+    return items
