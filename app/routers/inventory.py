@@ -10,10 +10,10 @@ import firebase_admin
 from fastapi import APIRouter, HTTPException
 
 # Initialize the Firebase Admin SDK with the downloaded service account key
-cred = credentials.Certificate("C:\Users\Khwaish\Downloads\kisaandvaar-firebase-adminsdk-t83e9-f6d6bf9844.json")
-initialize_app(cred)
+# cred = credentials.Certificate("D:/DdriveCodes/SIH/app/helpers/kisaandvaar-firebase-adminsdk-t83e9-f6d6bf9844.json")
+# initialize_app(cred)
 
-auth = auth()
+#auth = auth()
 
 router = APIRouter()
 
@@ -52,7 +52,7 @@ def create_inventory_item(name, category, quantity, storage, description, price,
 
 # Function to retrieve all items from the inventory based on storage type.
 @router.get("/inventory/<storage>")
-def get_items(storage):
+def get_items1(storage):
     try:
         storage_collection = db.collection(storage)  # Use storage type as collection name
         docs = storage_collection.get()

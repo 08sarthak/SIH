@@ -5,7 +5,7 @@ import uvicorn
 
 load_dotenv()
 from app.config import settings
-from app.routers import auth,market,chatbot
+from app.routers import auth,market,chatbot,auth2,marketplace,inventory
 app = FastAPI()
 
 origins = [settings.CLIENT_ORIGIN]
@@ -21,7 +21,9 @@ app.add_middleware(
 app.include_router(auth.router, tags=["Authentication"], prefix="/api/auth")
 app.include_router(market.router, tags=["Market"], prefix="/api/market")
 app.include_router(chatbot.router, tags=["Chatbot"], prefix="/api/chatbot")
-
+#app.include_router(auth2.router, tags=["Auth2"], prefix="/api/Auth2")
+app.include_router(marketplace.router, tags=["Marketplace"], prefix="/api/marketplace")
+app.include_router(inventory.router, tags=["Inventory"], prefix="/api/inventory")
 
 @app.get("/health")
 async def root():

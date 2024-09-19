@@ -12,8 +12,6 @@ class Query(BaseModel):
     
 class SignUpRequest(BaseModel):
     email: str
-    firstname: str
-    lastname: str
     username: str
     password: constr(min_length=8)
     phonenumber: str = Field(..., pattern=r'^\+91\d{10}$')

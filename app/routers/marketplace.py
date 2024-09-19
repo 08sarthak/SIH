@@ -10,10 +10,10 @@ import firebase_admin
 from fastapi import APIRouter, HTTPException
 
 # Initialize the Firebase Admin SDK with the downloaded service account key
-cred = credentials.Certificate("C:\Users\Khwaish\Downloads\kisaandvaar-firebase-adminsdk-t83e9-f6d6bf9844.json")
-initialize_app(cred)
+# cred = credentials.Certificate("D:/DdriveCodes/SIH/app/helpers/kisaandvaar-firebase-adminsdk-t83e9-f6d6bf9844.json")
+# initialize_app(cred)
 
-auth = auth()
+#auth = auth()
 
 router = APIRouter()
 
@@ -85,32 +85,32 @@ async def get_marketplace_items_by_query(query):
 
     items = []
     for doc in query_results:
-        item_data = dict(doc)
+        #item_data = dict(doc)
         # item_data = doc.to_dict()
         if item_data["item_status"] == "in stock":  # Filter in-stock items
             items.append(item_data)
 
     return items
 
-@router.get("/marketplace/{item_category}/query={query}")
-async def get_marketplace_items_by_category_and_query(item_category: str, query: str):
-    """
-    Retrieves marketplace items based on a category and search query.
-    """
-    inventory_ref = db.reference("inventory")
+# @router.get("/marketplace/{item_category}/query={query}")
+# async def get_marketplace_items_by_category_and_query(item_category: str, query: str):
+#     """
+#     Retrieves marketplace items based on a category and search query.
+#     """
+#     inventory_ref = db.reference("inventory")
     
-    # Query documents where the category matches and the name or description contains the query
-    query_results = inventory_ref.order_by_child("category").start_at(item_category).end_at(item_category + "\uf8ff")
-    query_results2 = inventory_ref.order_by_child("name").start_at(query).end_at(query + "\uf8ff")
+#     # Query documents where the category matches and the name or description contains the query
+#     query_results = inventory_ref.order_by_child("category").start_at(item_category).end_at(item_category + "\uf8ff")
+#     query_results2 = inventory_ref.order_by_child("name").start_at(query).end_at(query + "\uf8ff")
     
-    items = []
-    for doc in query_results:
-        # item_data = doc.to_dict()
-        item_data = dict(doc)
-        if item_data["item_status"] == "in stock":  # Filter in-stock items
-            items.append(item_data)
+#     items = []
+#     for doc in query_results:
+#         # item_data = doc.to_dict()
+#         item_data = dict(doc)
+#         if item_data["item_status"] == "in stock":  # Filter in-stock items
+#             items.append(item_data)
 
-    return items
+#     return items
 
 @router.get("/marketplace/{item_category}/query={query}")
 async def get_marketplace_items_by_category_and_query(item_category, query):

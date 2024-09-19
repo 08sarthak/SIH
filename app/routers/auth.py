@@ -46,20 +46,29 @@ async def sign_up(sign_up_request: modelType.SignUpRequest):
 async def login_user(login_request: modelType.LoginRequest):
     # auth_result = auth.authenticate_user(login_request.email, login_request.password)
     # login_id = auth.extract_sub_from_token(auth_result['AccessToken'])
-    return {
-        "status": True,
-        "message": "Login successful",
-        "access_token": "auth_result",
-        "login_id": "login_id" 
-    }
+    try:
+        response = await auth.login(login_request)
+        if response:
+            return {
+                "status": "success",
+                "message": "User signed up successfully. Please check your email to confirm your account.",
+                "data": response
+            }
+        else:
+            return {
+                "status": "failure",
+                "message": "User not signed up .",
+                "data": response
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
-
-@router.post("/set-profile")
-async def login_user(profile: modelType.ProfileData):
-    # auth_result = auth.authenticate_user(login_request.email, login_request.password)
-    # login_id = auth.extract_sub_from_token(auth_result['AccessToken'])
-    return {
-        "status": True,
-        "message": "Profile Set",
-        "data": profile 
-    }
+# @router.post("/set-profile")
+# async def login_user(profile: modelType.ProfileData):
+#     # auth_result = auth.authenticate_user(login_request.email, login_request.password)
+#     # login_id = auth.extract_sub_from_token(auth_result['AccessToken'])
+#     return {
+#         "status": True,
+#         "message": "Profile Set",
+#         "data": profile 
+#     }
