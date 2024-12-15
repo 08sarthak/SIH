@@ -1,25 +1,25 @@
-name: Deploy to Production Environment
+name: Deploy to Test Server
 
 on:
   push:
-    branches: [ master ]
+    branches: [ dev ]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Deploy to Production Server
+      - name: Deploy to Test Server
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.TEST_SERVER_HOST }}
-          username: ${{ secrets.TEST_SERVER_USER }}
+          username: ubuntu
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
           script: |
             cd /SIH/app
-            git pull origin master
+            git pull origin dev
             pip install -r requirements.txt
             sudo systemctl restart utilities-api
